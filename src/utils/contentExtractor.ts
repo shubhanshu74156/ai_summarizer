@@ -28,7 +28,6 @@ export async function extractContentFromUrls(
 
   onProgress?.(100);
 
-  // Combine all extracted content
   const combinedContent = results
     .filter(result => result.content.length > 0)
     .map(result => {
@@ -46,7 +45,6 @@ export async function extractContentFromUrls(
 }
 
 async function extractContentFromUrl(url: string | null): Promise<ContentExtractionResult> {
-  // Use CORS proxy for development (replace with your own backend in production)
   const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url ?? "")}`;
 
   try {
@@ -68,11 +66,9 @@ async function extractContentFromUrl(url: string | null): Promise<ContentExtract
       throw new Error('No content received from URL');
     }
 
-    // Parse HTML and extract readable content
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, 'text/html');
 
-    // Remove unwanted elements
     const unwantedSelectors = [
       'script', 'style', 'nav', 'header', 'footer', 'aside',
       'iframe', 'noscript', 'svg',
@@ -85,7 +81,6 @@ async function extractContentFromUrl(url: string | null): Promise<ContentExtract
       elements.forEach(el => el.remove());
     });
 
-    // Extract title
     let title = 'Untitled';
     const titleElement = doc.querySelector('title') || 
                         doc.querySelector('h1') || 
@@ -96,10 +91,8 @@ async function extractContentFromUrl(url: string | null): Promise<ContentExtract
       title = titleElement.textContent.trim();
     }
 
-    // Extract main content using multiple strategies
     let content = '';
 
-    // Strategy 1: Look for article/main tags
     const contentSelectors = [
       'article',
       'main',
@@ -121,12 +114,10 @@ async function extractContentFromUrl(url: string | null): Promise<ContentExtract
       }
     }
 
-    // Strategy 2: Fallback to body if no main content found
     if (!content && doc.body) {
       content = extractTextFromElement(doc.body);
     }
 
-    // Clean up the content
     content = cleanText(content);
 
     if (!content || content.length < 50) {
@@ -150,7 +141,6 @@ async function extractContentFromUrl(url: string | null): Promise<ContentExtract
 }
 
 function extractTextFromElement(element: Element): string {
-  // Get all paragraph-like elements
   const textElements = element.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, td, th, blockquote');
 
   if (textElements.length > 0) {
@@ -160,7 +150,6 @@ function extractTextFromElement(element: Element): string {
       .join('\n\n');
   }
 
-  // Fallback to all text content
   return element.textContent || '';
 }
 

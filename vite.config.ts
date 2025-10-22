@@ -5,6 +5,9 @@ import path from "path";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  define: {
+    'process.env': {}, // ⬅️ this prevents "process is not defined"
+  },
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),

@@ -51,12 +51,11 @@ export const SummarizeButton: React.FC<SummarizeButtonProps> = ({
 
       let extractedContent = "";
 
-      // ✅ Validate API key
       if (!validateApiKey(openaiApiKey)) {
         throw new Error('Invalid OpenAI API key. It should start with "sk-"');
       }
 
-      // ✅ DOM-based summarization (get all text from container)
+     
       if (domSummary) {
         const parentDiv = e.currentTarget.closest(`.${summaryClass}`) as HTMLElement | null;
         if (!parentDiv) {
@@ -70,7 +69,6 @@ export const SummarizeButton: React.FC<SummarizeButtonProps> = ({
 
         updateProgress(50);
       }
-      // ✅ URL-based summarization (fetch and extract content)
       else {
         if (!validateUrls(urls)) {
           throw new Error("Invalid URLs provided. URLs must start with http:// or https://");
@@ -84,7 +82,6 @@ export const SummarizeButton: React.FC<SummarizeButtonProps> = ({
         updateProgress(70);
       }
 
-      // ✅ Generate summary with OpenAI
       const summaryResult = await generateSummary({
         content: extractedContent,
         apiKey: openaiApiKey,

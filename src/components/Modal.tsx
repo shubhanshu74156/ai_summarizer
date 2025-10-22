@@ -8,13 +8,12 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
-  if (!isOpen) return null; // Don’t render if closed
-
+  if (!isOpen) return null; 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div
         className="modal-content"
-        onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
+        onClick={(e) => e.stopPropagation()} 
       >
         <button className="modal-close" onClick={onClose}>
           &times;
